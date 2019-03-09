@@ -10,11 +10,14 @@ namespace GravityLivesOn1._0
 {
 	public class Form1 : Form
 	{
-		private Random rand;
 
-		private Ding[] objekter;
+        
 
-		private Graphics g;
+        private Random rand;
+
+        private readonly object objecter;
+
+        private Graphics g;
 
 		private Bitmap bitmap;
 
@@ -30,7 +33,9 @@ namespace GravityLivesOn1._0
 
 		private SolidBrush b;
 
-		public Form1()
+        public object Objecter => objecter;
+
+        public Form1()
 		{
 			rand = new Random();
 			getAffector(0);
@@ -55,18 +60,7 @@ namespace GravityLivesOn1._0
 
 		private void DrawPaintMe()
 		{
-			for (int i = 0; i < objekter.Length; i++)
-			{
-				b = new SolidBrush(objekter[i].farve);
-				graphics2.FillEllipse(b, objekter[i].positionX, objekter[i].positionY, (int)objekter[i].størrelse, (int)objekter[i].størrelse);
-				b.Dispose();
-			}
-			for (int j = 0; j < affector.GetLength(0); j++)
-			{
-				graphics2.DrawLine(new Pen(Brushes.Gray), rand.Next(1000), rand.Next(600), (float)affector[j].start.X, (float)affector[j].end.Y);
-				new Point3D(affector[j].end.X, affector[j].end.Y, affector[j].end.Z);
-				new Point3D(affector[j].start.X, affector[j].start.Y, affector[j].start.Z);
-			}
+			
 			graphics2.Save();
 			g.DrawImage(bitmap2, 0, 0);
 			animate();
@@ -75,35 +69,7 @@ namespace GravityLivesOn1._0
 		private void animate()
 		{
 			int maxValue = rand.Next(15);
-			for (int i = 0; i < objekter.Length; i++)
-			{
-				objekter[i].positionX = objekter[i].positionX + objekter[i].hastighedX;
-				objekter[i].positionY = objekter[i].positionY + objekter[i].hastighedY;
-				objekter[i].positionZ = objekter[i].positionZ + objekter[i].hastighedZ;
-				for (int j = 0; j < affector.GetLength(0); j++)
-				{
-					objekter[i].positionX += (float)affector[j].destination.X;
-					objekter[i].positionY += (float)affector[j].destination.Y;
-					objekter[i].positionZ += (float)affector[j].destination.Z;
-				}
-				switch (rand.Next(2))
-				{
-				case 0:
-					objekter[i].hastighedX = objekter[i].hastighedX + (float)(rand.Next(maxValue) * 6);
-					objekter[i].hastighedY = objekter[i].hastighedY + (float)(rand.Next(maxValue) * 6);
-					objekter[i].hastighedZ = objekter[i].hastighedZ + (float)(rand.Next(maxValue) * 6);
-					break;
-				case 1:
-					objekter[i].hastighedX = objekter[i].hastighedX - (float)(rand.Next(maxValue) * 6);
-					objekter[i].hastighedY = objekter[i].hastighedY - (float)(rand.Next(maxValue) * 6);
-					objekter[i].hastighedZ = objekter[i].hastighedZ - (float)(rand.Next(maxValue) * 6);
-					break;
-				}
-				if (rand.Next(0) == 0)
-				{
-					objekter[i].størrelse = objekter[i].størrelse + (double)objekter[i].positionZ * 0.1;
-				}
-			}
+			
 		}
 
 		private void getAffector(int numbers)
@@ -114,11 +80,9 @@ namespace GravityLivesOn1._0
 		private void designObjekter(int number, int speed, Affector[] aff)
 		{
 			affector = aff;
-			objekter = new Ding[number];
 			for (int i = 0; i < number; i++)
 			{
 				Ding ding = new Ding(rand.Next(speed), rand.Next(100), rand.Next(255), rand.Next(10), this, affector);
-				objekter[i] = ding;
 			}
 		}
 
